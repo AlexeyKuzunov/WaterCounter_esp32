@@ -1,0 +1,118 @@
+Compiling the C compiler identification source file "CMakeCCompilerId.c" failed.
+Compiler: C:/Espressif/tools/xtensa-clang/12.0.1-d9341b81fc/xtensa-esp32-elf-clang/bin/clang.exe 
+Build flags: 
+Id flags:  
+
+The output was:
+1
+C:\gcc\bin\ld.exe: unrecognised emulation mode: i386pep
+Supported emulations: i386pe
+clang: error: linker command failed with exit code 1 (use -v to see invocation)
+
+
+Detecting C compiler ABI info failed to compile with the following output:
+Change Dir: D:/Hobby/electronics/Projects/WaterCounter/ESP32/ESP-IDF/main/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):C:/Espressif/tools/ninja/1.10.2/ninja.exe cmTC_25995 && [1/2] Building C object CMakeFiles/cmTC_25995.dir/CMakeCCompilerABI.c.obj
+clang version 12.0.1 (https://github.com/espressif/llvm-project.git d9341b81fc589c0483d629155bc88e6e85e3db34)
+Target: x86_64-w64-windows-gnu
+Thread model: posix
+InstalledDir: C:\Espressif\tools\xtensa-clang\12.0.1-d9341b81fc\xtensa-esp32-elf-clang\bin
+ (in-process)
+ "C:\\Espressif\\tools\\xtensa-clang\\12.0.1-d9341b81fc\\xtensa-esp32-elf-clang\\bin\\clang.exe" -cc1 -triple x86_64-w64-windows-gnu -emit-obj -mrelax-all --mrelax-relocations -disable-free -disable-llvm-verifier -discard-value-names -main-file-name CMakeCCompilerABI.c -mrelocation-model pic -pic-level 2 -mframe-pointer=none -fmath-errno -fno-rounding-math -mconstructor-aliases -mms-bitfields -munwind-tables -target-cpu x86-64 -tune-cpu generic -debugger-tuning=gdb -v -resource-dir "C:\\Espressif\\tools\\xtensa-clang\\12.0.1-d9341b81fc\\xtensa-esp32-elf-clang\\lib\\clang\\12.0.1" -dependency-file "CMakeFiles\\cmTC_25995.dir\\CMakeCCompilerABI.c.obj.d" -MT CMakeFiles/cmTC_25995.dir/CMakeCCompilerABI.c.obj -sys-header-deps -internal-isystem "C:\\Espressif\\tools\\xtensa-clang\\12.0.1-d9341b81fc\\xtensa-esp32-elf-clang\\lib\\clang\\12.0.1\\include" -internal-isystem "C:\\Espressif\\tools\\xtensa-clang\\12.0.1-d9341b81fc\\xtensa-esp32-elf-clang\\x86_64-w64-mingw32\\include" -internal-isystem "C:\\Espressif\\tools\\xtensa-clang\\12.0.1-d9341b81fc\\xtensa-esp32-elf-clang\\include" -fdebug-compilation-dir "D:\\Hobby\\electronics\\Projects\\WaterCounter\\ESP32\\ESP-IDF\\main\\build\\CMakeFiles\\CMakeTmp" -ferror-limit 19 -fno-use-cxa-atexit -fgnuc-version=4.2.1 -exception-model=seh -faddrsig -o CMakeFiles/cmTC_25995.dir/CMakeCCompilerABI.c.obj -x c C:/Espressif/tools/cmake/3.20.3/share/cmake-3.20/Modules/CMakeCCompilerABI.c
+clang -cc1 version 12.0.1 based upon LLVM 12.0.1 default target x86_64-w64-mingw32
+ignoring nonexistent directory "C:\Espressif\tools\xtensa-clang\12.0.1-d9341b81fc\xtensa-esp32-elf-clang\x86_64-w64-mingw32\include"
+#include "..." search starts here:
+#include <...> search starts here:
+ C:\Espressif\tools\xtensa-clang\12.0.1-d9341b81fc\xtensa-esp32-elf-clang\lib\clang\12.0.1\include
+ C:\Espressif\tools\xtensa-clang\12.0.1-d9341b81fc\xtensa-esp32-elf-clang\include
+End of search list.
+[2/2] Linking C executable cmTC_25995.exe
+FAILED: cmTC_25995.exe 
+cmd.exe /C "cd . && C:\Espressif\tools\xtensa-clang\12.0.1-d9341b81fc\xtensa-esp32-elf-clang\bin\clang.exe  -v CMakeFiles/cmTC_25995.dir/CMakeCCompilerABI.c.obj -o cmTC_25995.exe -Wl,--out-implib,libcmTC_25995.dll.a -Wl,--major-image-version,0,--minor-image-version,0   && cd ."
+clang version 12.0.1 (https://github.com/espressif/llvm-project.git d9341b81fc589c0483d629155bc88e6e85e3db34)
+Target: x86_64-w64-windows-gnu
+Thread model: posix
+InstalledDir: C:\Espressif\tools\xtensa-clang\12.0.1-d9341b81fc\xtensa-esp32-elf-clang\bin
+ "C:\\gcc\\bin\\ld.exe" -m i386pep -Bdynamic -o cmTC_25995.exe crt2.o crtbegin.o "-LC:\\Espressif\\tools\\xtensa-clang\\12.0.1-d9341b81fc\\xtensa-esp32-elf-clang\\x86_64-w64-mingw32\\lib" "-LC:\\Espressif\\tools\\xtensa-clang\\12.0.1-d9341b81fc\\xtensa-esp32-elf-clang\\lib" "-LC:\\Espressif\\tools\\xtensa-clang\\12.0.1-d9341b81fc\\xtensa-esp32-elf-clang\\x86_64-w64-mingw32/sys-root/mingw/lib" CMakeFiles/cmTC_25995.dir/CMakeCCompilerABI.c.obj --out-implib libcmTC_25995.dll.a --major-image-version 0 --minor-image-version 0 -lmingw32 "C:\\Espressif\\tools\\xtensa-clang\\12.0.1-d9341b81fc\\xtensa-esp32-elf-clang\\lib\\clang\\12.0.1\\lib\\windows\\libclang_rt.builtins-x86_64.a" -lmoldname -lmingwex -lmsvcrt -ladvapi32 -lshell32 -luser32 -lkernel32 -lmingw32 "C:\\Espressif\\tools\\xtensa-clang\\12.0.1-d9341b81fc\\xtensa-esp32-elf-clang\\lib\\clang\\12.0.1\\lib\\windows\\libclang_rt.builtins-x86_64.a" -lmoldname -lmingwex -lmsvcrt -lkernel32 crtend.o
+C:\gcc\bin\ld.exe: unrecognised emulation mode: i386pep
+Supported emulations: i386pe
+clang: error: linker command failed with exit code 1 (use -v to see invocation)
+ninja: build stopped: subcommand failed.
+
+
+
+
+Determining if the C compiler works failed with the following output:
+Change Dir: D:/Hobby/electronics/Projects/WaterCounter/ESP32/ESP-IDF/main/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):C:/Espressif/tools/ninja/1.10.2/ninja.exe cmTC_977ee && [1/2] Building C object CMakeFiles/cmTC_977ee.dir/testCCompiler.c.obj
+[2/2] Linking C executable cmTC_977ee.exe
+FAILED: cmTC_977ee.exe 
+cmd.exe /C "cd . && C:\Espressif\tools\xtensa-clang\12.0.1-d9341b81fc\xtensa-esp32-elf-clang\bin\clang.exe   CMakeFiles/cmTC_977ee.dir/testCCompiler.c.obj -o cmTC_977ee.exe -Wl,--out-implib,libcmTC_977ee.dll.a -Wl,--major-image-version,0,--minor-image-version,0  -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32 && cd ."
+C:\gcc\bin\ld.exe: unrecognised emulation mode: i386pep
+Supported emulations: i386pe
+clang: error: linker command failed with exit code 1 (use -v to see invocation)
+ninja: build stopped: subcommand failed.
+
+
+
+Compiling the C compiler identification source file "CMakeCCompilerId.c" failed.
+Compiler: C:/Espressif/tools/xtensa-clang/12.0.1-d9341b81fc/xtensa-esp32-elf-clang/bin/clang.exe 
+Build flags: 
+Id flags:  
+
+The output was:
+1
+C:\gcc\bin\ld.exe: unrecognised emulation mode: i386pep
+Supported emulations: i386pe
+clang: error: linker command failed with exit code 1 (use -v to see invocation)
+
+
+Detecting C compiler ABI info failed to compile with the following output:
+Change Dir: D:/Hobby/electronics/Projects/WaterCounter/ESP32/ESP-IDF/main/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):C:/Espressif/tools/ninja/1.10.2/ninja.exe cmTC_8ed73 && [1/2] Building C object CMakeFiles/cmTC_8ed73.dir/CMakeCCompilerABI.c.obj
+clang version 12.0.1 (https://github.com/espressif/llvm-project.git d9341b81fc589c0483d629155bc88e6e85e3db34)
+Target: x86_64-w64-windows-gnu
+Thread model: posix
+InstalledDir: C:\Espressif\tools\xtensa-clang\12.0.1-d9341b81fc\xtensa-esp32-elf-clang\bin
+ (in-process)
+ "C:\\Espressif\\tools\\xtensa-clang\\12.0.1-d9341b81fc\\xtensa-esp32-elf-clang\\bin\\clang.exe" -cc1 -triple x86_64-w64-windows-gnu -emit-obj -mrelax-all --mrelax-relocations -disable-free -disable-llvm-verifier -discard-value-names -main-file-name CMakeCCompilerABI.c -mrelocation-model pic -pic-level 2 -mframe-pointer=none -fmath-errno -fno-rounding-math -mconstructor-aliases -mms-bitfields -munwind-tables -target-cpu x86-64 -tune-cpu generic -debugger-tuning=gdb -v -resource-dir "C:\\Espressif\\tools\\xtensa-clang\\12.0.1-d9341b81fc\\xtensa-esp32-elf-clang\\lib\\clang\\12.0.1" -dependency-file "CMakeFiles\\cmTC_8ed73.dir\\CMakeCCompilerABI.c.obj.d" -MT CMakeFiles/cmTC_8ed73.dir/CMakeCCompilerABI.c.obj -sys-header-deps -internal-isystem "C:\\Espressif\\tools\\xtensa-clang\\12.0.1-d9341b81fc\\xtensa-esp32-elf-clang\\lib\\clang\\12.0.1\\include" -internal-isystem "C:\\Espressif\\tools\\xtensa-clang\\12.0.1-d9341b81fc\\xtensa-esp32-elf-clang\\x86_64-w64-mingw32\\include" -internal-isystem "C:\\Espressif\\tools\\xtensa-clang\\12.0.1-d9341b81fc\\xtensa-esp32-elf-clang\\include" -fdebug-compilation-dir "D:\\Hobby\\electronics\\Projects\\WaterCounter\\ESP32\\ESP-IDF\\main\\build\\CMakeFiles\\CMakeTmp" -ferror-limit 19 -fno-use-cxa-atexit -fgnuc-version=4.2.1 -exception-model=seh -faddrsig -o CMakeFiles/cmTC_8ed73.dir/CMakeCCompilerABI.c.obj -x c C:/Espressif/tools/cmake/3.20.3/share/cmake-3.20/Modules/CMakeCCompilerABI.c
+clang -cc1 version 12.0.1 based upon LLVM 12.0.1 default target x86_64-w64-mingw32
+ignoring nonexistent directory "C:\Espressif\tools\xtensa-clang\12.0.1-d9341b81fc\xtensa-esp32-elf-clang\x86_64-w64-mingw32\include"
+#include "..." search starts here:
+#include <...> search starts here:
+ C:\Espressif\tools\xtensa-clang\12.0.1-d9341b81fc\xtensa-esp32-elf-clang\lib\clang\12.0.1\include
+ C:\Espressif\tools\xtensa-clang\12.0.1-d9341b81fc\xtensa-esp32-elf-clang\include
+End of search list.
+[2/2] Linking C executable cmTC_8ed73.exe
+FAILED: cmTC_8ed73.exe 
+cmd.exe /C "cd . && C:\Espressif\tools\xtensa-clang\12.0.1-d9341b81fc\xtensa-esp32-elf-clang\bin\clang.exe  -v CMakeFiles/cmTC_8ed73.dir/CMakeCCompilerABI.c.obj -o cmTC_8ed73.exe -Wl,--out-implib,libcmTC_8ed73.dll.a -Wl,--major-image-version,0,--minor-image-version,0   && cd ."
+clang version 12.0.1 (https://github.com/espressif/llvm-project.git d9341b81fc589c0483d629155bc88e6e85e3db34)
+Target: x86_64-w64-windows-gnu
+Thread model: posix
+InstalledDir: C:\Espressif\tools\xtensa-clang\12.0.1-d9341b81fc\xtensa-esp32-elf-clang\bin
+ "C:\\gcc\\bin\\ld.exe" -m i386pep -Bdynamic -o cmTC_8ed73.exe crt2.o crtbegin.o "-LC:\\Espressif\\tools\\xtensa-clang\\12.0.1-d9341b81fc\\xtensa-esp32-elf-clang\\x86_64-w64-mingw32\\lib" "-LC:\\Espressif\\tools\\xtensa-clang\\12.0.1-d9341b81fc\\xtensa-esp32-elf-clang\\lib" "-LC:\\Espressif\\tools\\xtensa-clang\\12.0.1-d9341b81fc\\xtensa-esp32-elf-clang\\x86_64-w64-mingw32/sys-root/mingw/lib" CMakeFiles/cmTC_8ed73.dir/CMakeCCompilerABI.c.obj --out-implib libcmTC_8ed73.dll.a --major-image-version 0 --minor-image-version 0 -lmingw32 "C:\\Espressif\\tools\\xtensa-clang\\12.0.1-d9341b81fc\\xtensa-esp32-elf-clang\\lib\\clang\\12.0.1\\lib\\windows\\libclang_rt.builtins-x86_64.a" -lmoldname -lmingwex -lmsvcrt -ladvapi32 -lshell32 -luser32 -lkernel32 -lmingw32 "C:\\Espressif\\tools\\xtensa-clang\\12.0.1-d9341b81fc\\xtensa-esp32-elf-clang\\lib\\clang\\12.0.1\\lib\\windows\\libclang_rt.builtins-x86_64.a" -lmoldname -lmingwex -lmsvcrt -lkernel32 crtend.o
+C:\gcc\bin\ld.exe: unrecognised emulation mode: i386pep
+Supported emulations: i386pe
+clang: error: linker command failed with exit code 1 (use -v to see invocation)
+ninja: build stopped: subcommand failed.
+
+
+
+
+Determining if the C compiler works failed with the following output:
+Change Dir: D:/Hobby/electronics/Projects/WaterCounter/ESP32/ESP-IDF/main/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):C:/Espressif/tools/ninja/1.10.2/ninja.exe cmTC_1fabe && [1/2] Building C object CMakeFiles/cmTC_1fabe.dir/testCCompiler.c.obj
+[2/2] Linking C executable cmTC_1fabe.exe
+FAILED: cmTC_1fabe.exe 
+cmd.exe /C "cd . && C:\Espressif\tools\xtensa-clang\12.0.1-d9341b81fc\xtensa-esp32-elf-clang\bin\clang.exe   CMakeFiles/cmTC_1fabe.dir/testCCompiler.c.obj -o cmTC_1fabe.exe -Wl,--out-implib,libcmTC_1fabe.dll.a -Wl,--major-image-version,0,--minor-image-version,0  -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32 && cd ."
+C:\gcc\bin\ld.exe: unrecognised emulation mode: i386pep
+Supported emulations: i386pe
+clang: error: linker command failed with exit code 1 (use -v to see invocation)
+ninja: build stopped: subcommand failed.
+
+
+
