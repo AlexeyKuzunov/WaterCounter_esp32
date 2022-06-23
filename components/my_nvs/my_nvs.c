@@ -33,7 +33,7 @@ uint32_t get_counter_nvs(nvs_handle_t my_handle, char * name_count){
       case ESP_OK:
         printf("Done\n");
         printf("Restart counter = %d\n", value_count);
-        nvs_close(my_handle);
+        //nvs_close(my_handle);
         return value_count;
         break;
       case ESP_ERR_NVS_NOT_FOUND:
@@ -42,8 +42,7 @@ uint32_t get_counter_nvs(nvs_handle_t my_handle, char * name_count){
       default :
         printf("Error (%s) reading!\n", esp_err_to_name(err));
       }
-      nvs_close(my_handle);
-      return -1;
+     return -1;
 }
 
 void set_counter_nvs(nvs_handle_t my_handle, char * name_count, uint32_t w_c){
@@ -53,6 +52,4 @@ void set_counter_nvs(nvs_handle_t my_handle, char * name_count, uint32_t w_c){
   printf("Committing updates in NVS ... ");
   err = nvs_commit(my_handle);
   printf((err != ESP_OK) ? "Failed!\n" : "Done\n");
-  //Close
-  nvs_close(my_handle);
 }
