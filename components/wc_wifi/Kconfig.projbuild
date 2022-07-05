@@ -1,0 +1,13 @@
+menu "WC WIFI Configuration"
+	config WIFI_SSID
+        string "WiFi SSID"
+        default "MK_2GHz"
+        help
+            SSID (network name) for the example to connect to.
+
+    config WIFI_PASS
+        string "WiFi Password"
+        default "216!239!"
+        help
+            WiFi password (WPA or WPA2) for the example to use.
+endmenu

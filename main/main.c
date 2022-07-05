@@ -8,8 +8,12 @@
 #include <sys/time.h>
 #include "my_nvs.h"
 //#include "esp_err.h"
-#include "timeutils.h"
+//#include "timeutils.h"
 //#include "freertos/semphr.h"
+#include <esp_event.h>
+#include <esp_log.h>
+#include "wc_wifi.h"
+#include <esp_mqtt.h>
 
 /**
  *
@@ -33,7 +37,8 @@ static xQueueHandle gpio_evt_queue = NULL;
 
 nvs_handle_t my_handle;
 
-static void IRAM_ATTR gpio_isr_handler(void* arg){
+//static void IRAM_ATTR gpio_isr_handler(void* arg)
+static void gpio_isr_handler(void* arg){
     uint32_t gpio_num = (uint32_t) arg;
     xQueueSendFromISR(gpio_evt_queue, &gpio_num, NULL);
 }
@@ -63,6 +68,7 @@ static void gpio_task(void* arg){
          if (io_num == HOT_GPIO) tmp_hot++;
          if (io_num == COLD_GPIO) tmp_cold++;
        }
+       sum_messages = 0;
        if (tmp_hot > 0){
          hot_count++;
          set_counter_nvs(my_handle, "hot", hot_count);
@@ -79,6 +85,51 @@ static void gpio_task(void* arg){
    }
    nvs_close(my_handle);
 }
+
+static void connect() {
+  // start mqtt
+  esp_mqtt_start(CONFIG_MQTT_HOST, CONFIG_MQTT_PORT, "esp-mqtt", CONFIG_MQTT_USER, CONFIG_MQTT_PASS);
+}
+
+static void process(void *p) {
+  for (;;) {
+    // publish every second
+    esp_mqtt_publish("/home/test", (uint8_t *)"world", 5, 2, false);
+    vTaskDelay(CONFIG_PUB_INTERVAL / portTICK_PERIOD_MS);
+  }
+}
+
+static void restart(void *_) {
+  // initial start
+  connect();
+
+  for (;;) {
+    // restart periodically
+    vTaskDelay(CONFIG_RES_INTERVAL / portTICK_PERIOD_MS);
+    esp_mqtt_stop();
+    connect();
+  }
+}
+
+
+static void status_callback(esp_mqtt_status_t status) {
+  switch (status) {
+    case ESP_MQTT_STATUS_CONNECTED:
+      // subscribe
+      esp_mqtt_subscribe("/home/test", 2);
+
+      break;
+
+    case ESP_MQTT_STATUS_DISCONNECTED:
+    default:
+      break;
+  }
+}
+
+static void message_callback(const char *topic, uint8_t *payload, size_t len) {
+  ESP_LOGI("/home/test", "incoming: %s => %s (%d)", topic, payload, (int)len);
+}
+
 
 void app_main(void)
 {
@@ -104,9 +155,16 @@ void app_main(void)
    io_conf.pin_bit_mask = GPIO_INPUT_PIN_SEL;
    //set as input mode
    io_conf.mode = GPIO_MODE_INPUT;
+   //disable pull-up mode
+   io_conf.pull_up_en = 0;
    //enable pull-down mode
    io_conf.pull_down_en = 1;
    gpio_config(&io_conf);
+
+   // initialize mqtt
+   esp_mqtt_init(status_callback, message_callback, 256, 2000);
+
+   wifi_init();
 
    gpio_set_pull_mode(HOT_GPIO, GPIO_PULLDOWN_ENABLE);
    //install gpio isr service
@@ -117,10 +175,16 @@ void app_main(void)
    gpio_isr_handler_add(HOT_GPIO, gpio_isr_handler, (void*) HOT_GPIO);
 
 
+
   my_handle = my_nvs_init("test");
   hot_count = get_counter_nvs(my_handle, "hot");
   cold_count = get_counter_nvs(my_handle, "cold");
   printf("hot_count: %d \n cold_count: %d \n", hot_count, cold_count);
+
+  // create mqtt tasks
+  xTaskCreate(process, "process", 2048, NULL, 10, NULL);
+  xTaskCreate(restart, "restart", 2048, NULL, 10, NULL);
+
   //start gpio task
   xTaskCreate(gpio_task, "gpio_task", 2048, NULL, tskIDLE_PRIORITY, NULL);
   printf("Minimum free heap size: %d bytes\n", esp_get_minimum_free_heap_size());

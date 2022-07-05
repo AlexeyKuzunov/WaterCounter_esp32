@@ -1,0 +1,60 @@
+menu "Example Configuration"
+
+	config HOT_GPIO
+        int "HOT Counter"
+        range 0 48
+        default 16
+        help
+            GPIO number Water 1.
+
+	config COLD_GPIO
+        int "COLD Counter"
+        range 0 48
+        default 4
+        help
+            GPIO number Water 2.
+
+    config LED_GPIO
+        int "Blink GPIO number"
+        range 0 48
+        default 5
+        help
+            GPIO number (IOxx) to blink on and off or the RMT signal for the addressable LED.
+            Some GPIOs are used for other purposes (flash connections, etc.) and cannot be used to blink.
+	
+	config MQTT_HOST
+        string "mqtt host"
+        default "mqtt"
+        help
+            MQTT host
+            
+	config MQTT_PORT
+        string "mqtt port"
+        default "1883"
+        help
+            mqtt port.
+            
+	config MQTT_USER
+        string "mqtt user"
+        default "myuser"
+        help
+            mqtt user.
+            
+    config MQTT_PASS
+        string "mqtt Password"
+        default "mypassword"
+        help
+            mqtt password.
+	
+	config PUB_INTERVAL
+		int "Publish Interval"
+		default 1000
+		help
+			Publish Interval
+	
+	config RES_INTERVAL
+		int "Restart Interval"
+		default 20000
+		help
+			Restart Interval
+endmenu

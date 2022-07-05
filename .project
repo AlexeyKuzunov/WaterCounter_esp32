@@ -1224,6 +1224,21 @@
 			<location>C:/Espressif/frameworks/esp-idf-v4.4/components/efuse/src/esp_efuse_utility.c</location>
 		</link>
 		<link>
+			<name>esp_idf_components/esp-mqtt/src/esp_lwmqtt.c</name>
+			<type>1</type>
+			<location>C:/Espressif/frameworks/esp-idf-v4.4/components/esp-mqtt/src/esp_lwmqtt.c</location>
+		</link>
+		<link>
+			<name>esp_idf_components/esp-mqtt/src/esp_mqtt.c</name>
+			<type>1</type>
+			<location>C:/Espressif/frameworks/esp-idf-v4.4/components/esp-mqtt/src/esp_mqtt.c</location>
+		</link>
+		<link>
+			<name>esp_idf_components/esp-mqtt/src/esp_tls_lwmqtt.c</name>
+			<type>1</type>
+			<location>C:/Espressif/frameworks/esp-idf-v4.4/components/esp-mqtt/src/esp_tls_lwmqtt.c</location>
+		</link>
+		<link>
 			<name>esp_idf_components/esp-tls/esp-tls-crypto/esp_tls_crypto.c</name>
 			<type>1</type>
 			<location>C:/Espressif/frameworks/esp-idf-v4.4/components/esp-tls/esp-tls-crypto/esp_tls_crypto.c</location>
@@ -2312,6 +2327,26 @@
 			<name>esp_idf_components/coap/libcoap/src/uri.c</name>
 			<type>1</type>
 			<location>C:/Espressif/frameworks/esp-idf-v4.4/components/coap/libcoap/src/uri.c</location>
+		</link>
+		<link>
+			<name>esp_idf_components/esp-mqtt/lwmqtt/src/client.c</name>
+			<type>1</type>
+			<location>C:/Espressif/frameworks/esp-idf-v4.4/components/esp-mqtt/lwmqtt/src/client.c</location>
+		</link>
+		<link>
+			<name>esp_idf_components/esp-mqtt/lwmqtt/src/helpers.c</name>
+			<type>1</type>
+			<location>C:/Espressif/frameworks/esp-idf-v4.4/components/esp-mqtt/lwmqtt/src/helpers.c</location>
+		</link>
+		<link>
+			<name>esp_idf_components/esp-mqtt/lwmqtt/src/packet.c</name>
+			<type>1</type>
+			<location>C:/Espressif/frameworks/esp-idf-v4.4/components/esp-mqtt/lwmqtt/src/packet.c</location>
+		</link>
+		<link>
+			<name>esp_idf_components/esp-mqtt/lwmqtt/src/string.c</name>
+			<type>1</type>
+			<location>C:/Espressif/frameworks/esp-idf-v4.4/components/esp-mqtt/lwmqtt/src/string.c</location>
 		</link>
 		<link>
 			<name>esp_idf_components/esp_http_server/src/util/ctrl_sock.c</name>
