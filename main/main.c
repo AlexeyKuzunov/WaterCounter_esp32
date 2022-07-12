@@ -8,12 +8,13 @@
 #include <sys/time.h>
 #include "my_nvs.h"
 //#include "esp_err.h"
-//#include "timeutils.h"
+#include "timeutils.h"
 //#include "freertos/semphr.h"
 #include <esp_event.h>
 #include <esp_log.h>
 #include "wc_wifi.h"
 #include <esp_mqtt.h>
+#include "c_list.h"
 
 /**
  *
@@ -32,58 +33,51 @@
 #define ESP_INTR_FLAG_DEFAULT 0
 
 uint32_t hot_count = 0, cold_count = 0;
-
-static xQueueHandle gpio_evt_queue = NULL;
+static uint32_t gpio_num;
 
 nvs_handle_t my_handle;
+
+/*
+*  Смотрим пуст ли список. Если пуст запускаем задачу.
+*  Добавляем в список номер gpio и время запуска.
+*  Если не пуст ищем номер gpio. Если номера нет  запускаем задачу
+*  и добавляем запись в список Если есть смотрим время работы.
+*  Время работы больше Х мс запускаем задачу, обновляем время в списке.
+*  Если меньше Х мс. ничего не делаем.
+*/
+static void gpio_task(void* arg){
+  gpio_num = *(uint32_t*)arg;
+
+  struct {
+    uint32_t lastGpio;
+    struct timeval lastPress;
+  } lastEvent;
+
+  static list_t ListEvent = list_createList();
+  static uint8_t SizeListEvent = 0;
+
+  if (SizeListEvent == 0) {
+    lastEvent.lastGpio = gpio_num;
+    gettimeofday(&lastEvent.lastPress, NULL);
+
+  }
+
+  if (gpio_num == HOT_GPIO){
+    hot_count++;
+    set_counter_nvs(my_handle, "hot", hot_count);
+  }
+  if (gpio_num == COLD_GPIO){
+    cold_count++;
+    set_counter_nvs(my_handle, "cold", cold_count);
+  }
+  vTaskDelay(100);
+  vTaskDelete(NULL);
+}
 
 //static void IRAM_ATTR gpio_isr_handler(void* arg)
 static void gpio_isr_handler(void* arg){
     uint32_t gpio_num = (uint32_t) arg;
-    xQueueSendFromISR(gpio_evt_queue, &gpio_num, NULL);
-}
-
-static void gpio_task(void* arg){
-  uint32_t io_num;
-
-  //create a queue to handle gpio event from isr
-  gpio_evt_queue = xQueueCreate(10, sizeof(uint32_t));
-
-   int cnt = 0;
-
-   for(;;) {
-     /*
-      * Каждые Х мсек смотрим количество значений в очереди.
-      * Если значения есть, в цикле проверяем номер порта gpio в значении
-      *  и устанавливаем соответствующий gpio флаг .
-      * Если значение флага gpio больше нуля инкрементируем глобальную переменную
-      * счетчика и ее значение в nvs.
-      */
-     cnt++;
-     volatile uint8_t sum_messages = uxQueueMessagesWaiting(gpio_evt_queue);
-     uint8_t tmp_hot = 0, tmp_cold = 0;
-     if (sum_messages > 0) {
-       for(uint8_t i = 0; i < sum_messages; i++){
-         xQueueReceive(gpio_evt_queue, &io_num, portMAX_DELAY);
-         if (io_num == HOT_GPIO) tmp_hot++;
-         if (io_num == COLD_GPIO) tmp_cold++;
-       }
-       sum_messages = 0;
-       if (tmp_hot > 0){
-         hot_count++;
-         set_counter_nvs(my_handle, "hot", hot_count);
-         printf("GPIO[%d] intr, val: %d\n", io_num, gpio_get_level(io_num));
-       }
-       if (tmp_cold > 0) {
-         cold_count++;
-         set_counter_nvs(my_handle, "cold", cold_count);
-         printf("GPIO[%d] intr, val: %d\n", io_num, gpio_get_level(io_num));
-       }
-     }
-     gpio_set_level(LED_GPIO, cnt % 2);
-     vTaskDelay(1000 / portTICK_RATE_MS);
-   }
-   nvs_close(my_handle);
+    xTaskCreate(gpio_task, "gpio_task", 2048, (void*)&gpio_num, tskIDLE_PRIORITY, NULL);
 }
 
 static void connect() {
@@ -185,8 +179,7 @@ void app_main(void)
   xTaskCreate(process, "process", 2048, NULL, 10, NULL);
   xTaskCreate(restart, "restart", 2048, NULL, 10, NULL);
 
-  //start gpio task
-  xTaskCreate(gpio_task, "gpio_task", 2048, NULL, tskIDLE_PRIORITY, NULL);
+
   printf("Minimum free heap size: %d bytes\n", esp_get_minimum_free_heap_size());
 
   while(1) {

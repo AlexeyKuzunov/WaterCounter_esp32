@@ -57,7 +57,7 @@ struct timeval timeval_add(struct timeval *a, struct timeval *b) {
 uint32_t timeval_durationFromNow(struct timeval *a) {
   struct timeval b;
   gettimeofday(&b, NULL);
-  struct timeval delta = timeval_sub(a, &b);
+  struct timeval delta = timeval_sub(&b, a);
   if (delta.tv_sec < 0) {
     return 0;
   }
