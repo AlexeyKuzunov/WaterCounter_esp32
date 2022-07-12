@@ -30,59 +30,61 @@
 #define COLD_GPIO    GPIO_NUM_4
 #define GPIO_INPUT_PIN_SEL  ((1ULL<<HOT_GPIO) | (1ULL<<COLD_GPIO))
 #define ESP_INTR_FLAG_DEFAULT 0
+#define EVENT_HOT    0x01
+#define EVENT_COLD    0x02
 
+static TaskHandle_t xGpioTask;
 uint32_t hot_count = 0, cold_count = 0;
-
-static xQueueHandle gpio_evt_queue = NULL;
 
 nvs_handle_t my_handle;
 
 //static void IRAM_ATTR gpio_isr_handler(void* arg)
 static void gpio_isr_handler(void* arg){
-    uint32_t gpio_num = (uint32_t) arg;
-    xQueueSendFromISR(gpio_evt_queue, &gpio_num, NULL);
+  uint32_t gpio_num = (uint32_t) arg;
+  BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+  switch (gpio_num) {
+    case HOT_GPIO:
+      xTaskNotifyFromISR (xGpioTask, EVENT_HOT, eSetBits, &xHigherPriorityTaskWoken);
+      break;
+    case COLD_GPIO:
+      xTaskNotifyFromISR (xGpioTask, EVENT_COLD, eSetBits, &xHigherPriorityTaskWoken);
+      break;
+  }
+  portYIELD_FROM_ISR( xHigherPriorityTaskWoken );
 }
 
 static void gpio_task(void* arg){
-  uint32_t io_num;
+  //uint32_t io_num;
+  BaseType_t xResult;
+  const TickType_t xMaxBlockTime = pdMS_TO_TICKS( 500 );
+  uint32_t ulNotifiedValue;
 
-  //create a queue to handle gpio event from isr
-  gpio_evt_queue = xQueueCreate(10, sizeof(uint32_t));
-
-   int cnt = 0;
-
-   for(;;) {
-     /*
-      * Каждые Х мсек смотрим количество значений в очереди.
-      * Если значения есть, в цикле проверяем номер порта gpio в значении
-      *  и устанавливаем соответствующий gpio флаг .
-      * Если значение флага gpio больше нуля инкрементируем глобальную переменную
-      * счетчика и ее значение в nvs.
-      */
-     cnt++;
-     volatile uint8_t sum_messages = uxQueueMessagesWaiting(gpio_evt_queue);
-     uint8_t tmp_hot = 0, tmp_cold = 0;
-     if (sum_messages > 0) {
-       for(uint8_t i = 0; i < sum_messages; i++){
-         xQueueReceive(gpio_evt_queue, &io_num, portMAX_DELAY);
-         if (io_num == HOT_GPIO) tmp_hot++;
-         if (io_num == COLD_GPIO) tmp_cold++;
-       }
-       sum_messages = 0;
-       if (tmp_hot > 0){
-         hot_count++;
-         set_counter_nvs(my_handle, "hot", hot_count);
-         printf("GPIO[%d] intr, val: %d\n", io_num, gpio_get_level(io_num));
-       }
-       if (tmp_cold > 0) {
-         cold_count++;
-         set_counter_nvs(my_handle, "cold", cold_count);
-         printf("GPIO[%d] intr, val: %d\n", io_num, gpio_get_level(io_num));
-       }
-     }
-     gpio_set_level(LED_GPIO, cnt % 2);
-     vTaskDelay(1000 / portTICK_RATE_MS);
-   }
+  for(;;) {
+    /* Ожидание оповещения от прерывания. */
+    xResult = xTaskNotifyWait (pdFALSE,    /* Не очищать биты на входе. */
+        ULONG_MAX,        /* Очистка всех бит на выходе. */
+        &ulNotifiedValue, /* Сохраняет значение оповещения. */
+        xMaxBlockTime );
+    if( xResult == pdPASS ){
+      /* Было принято оповещение. Анализ установленных бит. */
+      if ((ulNotifiedValue & EVENT_HOT) != 0){
+        hot_count++;
+        set_counter_nvs(my_handle, "hot", hot_count);
+        printf("hot val: %d\n", hot_count);
+      }
+      if ((ulNotifiedValue & EVENT_COLD) != 0){
+        cold_count++;
+        set_counter_nvs(my_handle, "cold", cold_count);
+        printf("cold val: %d\n", cold_count);
+      }
+    }
+    else{
+      /* За ожидаемое время не было получено оповещение. */
+      //prvCheckForErrors();
+      }
+  //gpio_set_level(LED_GPIO, cnt % 2);
+  vTaskDelay(1000 / portTICK_RATE_MS);
+  }
    nvs_close(my_handle);
 }
 
