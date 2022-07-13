@@ -33,13 +33,13 @@
 #define EVENT_HOT    0x01
 #define EVENT_COLD    0x02
 
-static TaskHandle_t xGpioTask;
+volatile static TaskHandle_t xGpioTask = NULL;
 uint32_t hot_count = 0, cold_count = 0;
 
 nvs_handle_t my_handle;
 
 //static void IRAM_ATTR gpio_isr_handler(void* arg)
-static void gpio_isr_handler(void* arg){
+static IRAM_ATTR void gpio_isr_handler(void* arg){
   uint32_t gpio_num = (uint32_t) arg;
   BaseType_t xHigherPriorityTaskWoken = pdFALSE;
   switch (gpio_num) {
@@ -188,7 +188,7 @@ void app_main(void)
   xTaskCreate(restart, "restart", 2048, NULL, 10, NULL);
 
   //start gpio task
-  xTaskCreate(gpio_task, "gpio_task", 2048, NULL, tskIDLE_PRIORITY, NULL);
+  xTaskCreate(gpio_task, "gpio_task", 2048, NULL, tskIDLE_PRIORITY, &xGpioTask);
   printf("Minimum free heap size: %d bytes\n", esp_get_minimum_free_heap_size());
 
   while(1) {
