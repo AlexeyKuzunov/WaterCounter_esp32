@@ -33,7 +33,7 @@
 #define EVENT_HOT    0x01
 #define EVENT_COLD    0x02
 
-volatile static TaskHandle_t xGpioTask = NULL;
+static TaskHandle_t xGpioTask = NULL;
 uint32_t hot_count = 0, cold_count = 0;
 
 nvs_handle_t my_handle;
@@ -62,7 +62,8 @@ static void gpio_task(void* arg){
   for(;;) {
     /* Ожидание оповещения от прерывания. */
     xResult = xTaskNotifyWait (pdFALSE,    /* Не очищать биты на входе. */
-        ULONG_MAX,        /* Очистка всех бит на выходе. */
+        0, /* Не очищаем биты на выходе */
+        /*ULONG_MAX,        Очистка всех бит на выходе. */
         &ulNotifiedValue, /* Сохраняет значение оповещения. */
         xMaxBlockTime );
     if( xResult == pdPASS ){
@@ -71,11 +72,15 @@ static void gpio_task(void* arg){
         hot_count++;
         set_counter_nvs(my_handle, "hot", hot_count);
         printf("hot val: %d\n", hot_count);
+        vTaskDelay(50 / portTICK_RATE_MS);
+        ulTaskNotifyValueClear(xGpioTask, EVENT_HOT);
       }
       if ((ulNotifiedValue & EVENT_COLD) != 0){
         cold_count++;
         set_counter_nvs(my_handle, "cold", cold_count);
         printf("cold val: %d\n", cold_count);
+        vTaskDelay(50 / portTICK_RATE_MS);
+        ulTaskNotifyValueClear(xGpioTask, EVENT_COLD);
       }
     }
     else{
@@ -83,7 +88,8 @@ static void gpio_task(void* arg){
       //prvCheckForErrors();
       }
   //gpio_set_level(LED_GPIO, cnt % 2);
-  vTaskDelay(1000 / portTICK_RATE_MS);
+
+
   }
    nvs_close(my_handle);
 }
